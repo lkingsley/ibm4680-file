@@ -22,6 +22,7 @@ if FILE_SIZE == 0:
     print('Empty file')
     quit(0)
 
+
 def is_keyed():
     kfile = KeyedFile()
     # Check if file size is multiple of 512
@@ -36,31 +37,45 @@ def is_keyed():
         month = control_block[32]
         day = control_block[33]
         kfile.creation_date = '{}-{}-{}'.format(year, month, day)
-        
+
         kfile.blocks_qty = control_block[42] | \
                         (control_block[43] << 8) | \
                         (control_block[44] << 16) | \
                         (control_block[45] << 24)
         kfile.key_length = control_block[54] | (control_block[55] << 8)
         kfile.record_size = control_block[46] | (control_block[47] << 8)
-        
+
         if kfile.blocks_qty * KEYED_BLOCK_SIZE != FILE_SIZE:
             return
         print('Keyed file')
         quit(0)
 
+
 is_keyed()
 
 with open(sys.argv[1], 'rb') as f:
-    if len(f.readlines()) == 1:
+    lines = f.readlines()
+    f.seek(0)
+
+    if len(lines) == 1:
         print('Direct file')
         quit(0)
-
+    else:
+        is_direct = False
+        for line in lines:
+            if line[-2:] == b'\x00\n':
+                is_direct = True
+            elif line[-2:] == b'\r\n':
+                is_direct = False
+                break
+        if is_direct:
+            print('Direct file')
+            quit(0)
 
 with open(sys.argv[1], 'rb') as f:
     is_random = False
     first_line_length = len(f.readline())
-    
+
     for line in f:
         if first_line_length == len(line):
             is_random = True
