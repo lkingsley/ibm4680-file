@@ -1,6 +1,6 @@
 # IBM4680 File Utility
 
-Determine file type  
+Determines file type  
 
 ### Why?
 SMA utilizes four type of files.  
