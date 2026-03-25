@@ -1,9 +1,9 @@
 class KeyedFile:
-    og_file_name = None
-    creation_date = None
-    blocks_qty = None
-    key_length = None
-    record_size = None
+    og_file_name = ''
+    creation_date = ''
+    blocks_qty = 0
+    key_length = 0
+    record_size = 0
 
     def print(self):
         print('OG file name:', self.og_file_name)
