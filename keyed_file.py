@@ -8,7 +8,7 @@ class KeyedFile:
     key_length = 0
     record_size = 0
 
-    def print(self):
+    def to_string(self):
         print('OG file name:', self.og_file_name)
         print('Creation date:', self.creation_date)
         print('Blocks qty:', self.blocks_qty)
