@@ -1,8 +1,6 @@
 import os
 import re
-from keyed_file import KeyedFile
-
-BLOCK_SIZE = 512
+from keyed_file import KeyedFile, BLOCK_SIZE
 
 
 def is_direct(file_name):

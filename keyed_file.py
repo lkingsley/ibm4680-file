@@ -1,3 +1,6 @@
+BLOCK_SIZE = 512
+
+
 class KeyedFile:
     og_file_name = ''
     creation_date = ''
