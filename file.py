@@ -1,12 +1,16 @@
 import sys
 import os
 from keyed_file import KeyedFile
+import re
 
 KEYED_BLOCK_SIZE = 512
 FILE_SIZE = 0
-# Random file: Fixed length records delimited by newlines
-# Sequential: Variable length records delimited by newlines
-# Direct: Records one after another without any delimiter or new lines
+
+# Direct file: Records one after another without any delimiter or new lines
+# Keyed file: Fixed length records with a control block at the beginning of the file
+# Random file: Fixed length records delimited by CRLF
+# Sequential file: Variable length records delimited by CRLF
+
 
 # Check if file is provided as argument
 if len(sys.argv) != 2:
@@ -31,12 +35,12 @@ def is_keyed():
 
     with open(sys.argv[1], 'rb') as f:
         control_block = f.read(KEYED_BLOCK_SIZE)
-        kfile.og_file_name = control_block[12:30]
+        kfile.og_file_name = str(control_block[12:30], 'utf-8').strip()
 
         year = control_block[30] | control_block[31] << 8
         month = control_block[32]
         day = control_block[33]
-        kfile.creation_date = '{}-{}-{}'.format(year, month, day)
+        kfile.creation_date = '{}/{}/{}'.format(year, month, day)
 
         kfile.blocks_qty = control_block[42] | \
                         (control_block[43] << 8) | \
@@ -54,23 +58,11 @@ def is_keyed():
 is_keyed()
 
 with open(sys.argv[1], 'rb') as f:
-    lines = f.readlines()
-    f.seek(0)
-
-    if len(lines) == 1:
+    match = re.search(b'\r\n', f.read())
+    if match is None:
         print('Direct file')
         quit(0)
-    else:
-        is_direct = False
-        for line in lines:
-            if line[-2:] == b'\x00\n':
-                is_direct = True
-            elif line[-2:] == b'\r\n':
-                is_direct = False
-                break
-        if is_direct:
-            print('Direct file')
-            quit(0)
+
 
 with open(sys.argv[1], 'rb') as f:
     is_random = False
