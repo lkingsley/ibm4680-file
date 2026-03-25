@@ -13,6 +13,12 @@ def is_direct(file_name):
             quit(0)
 
 
+def is_empty(file_name):
+    if os.path.getsize(file_name) == 0:
+        print('Empty file')
+        quit(0)
+
+
 def is_keyed(file_name):
     kfile = KeyedFile()
     file_size = os.path.getsize(file_name)
