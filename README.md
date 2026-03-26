@@ -1,12 +1,17 @@
 # IBM4680 File Utility
 
-Determines file type  
+Determines 4680 OS file type  
 
-### Why?
-SMA utilizes four type of files.  
+### Why?  
+IBM 4680 OS utilizes four types of files.  
 - Direct files  
 - Keyed files  
 - Random files
 - Sequential files
 
-This utility will tell you the type of file it receives as an argument.
+When troubleshooting system bugs technicians dont always know what type of files they are dealing with. This utility is meant to help on those situations.
+
+### Execution
+```
+python2 file.py EAMITEMR.DAT
+```
