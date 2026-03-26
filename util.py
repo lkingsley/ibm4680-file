@@ -3,6 +3,10 @@ import re
 from keyed_file import KeyedFile, BLOCK_SIZE
 
 
+def hex_to_int(hex_string):
+    return int(hex_string.encode('hex'), 16)
+
+
 def is_direct(file_name):
     with open(file_name, 'rb') as f:
         match = re.search(b'\r\n', f.read())
@@ -27,18 +31,19 @@ def is_keyed(file_name):
 
     with open(file_name, 'rb') as f:
         control_block = f.read(BLOCK_SIZE)
-        kfile.og_file_name = str(control_block[12:30], 'utf-8').strip()
-
-        year = control_block[30] | control_block[31] << 8
-        month = control_block[32]
-        day = control_block[33]
+        kfile.og_file_name = control_block[12:30].decode(
+            encoding='utf-8', errors='ignore').rstrip('\x00')
+                                    
+        year = hex_to_int(control_block[30]) | (hex_to_int(control_block[31]) << 8)
+        month = hex_to_int(control_block[32])
+        day = hex_to_int(control_block[33])
         kfile.creation_date = '{}/{}/{}'.format(year, month, day)
-
-        kfile.blocks_qty = control_block[42] | (control_block[43] << 8) | \
-            (control_block[44] << 16) | \
-            (control_block[45] << 24)
-        kfile.key_length = control_block[54] | (control_block[55] << 8)
-        kfile.record_size = control_block[46] | (control_block[47] << 8)
+        
+        kfile.blocks_qty = hex_to_int(control_block[42]) | (hex_to_int(control_block[43]) << 8) | \
+            (hex_to_int(control_block[44]) << 16) | \
+            (hex_to_int(control_block[45]) << 24)
+        kfile.key_length = hex_to_int(control_block[54]) | (hex_to_int(control_block[55]) << 8)
+        kfile.record_size = hex_to_int(control_block[46]) | (hex_to_int(control_block[47]) << 8)
 
         if kfile.blocks_qty * BLOCK_SIZE != file_size:
             return
