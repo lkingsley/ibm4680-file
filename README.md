@@ -1,8 +1,6 @@
 # IBM4680 File Utility
 
-Determines 4680 OS file type  
-
-### Why?  
+Determines 4680 OS file type.  
 
 IBM 4680 OS utilizes four types of files.  
 - Direct files  
