@@ -15,3 +15,9 @@ When troubleshooting system bugs technicians dont always know what type of files
 ```
 python2 file.py EAMITEMR.DAT
 ```
+### 4680 OS notes  
+When installing on 4680 OS systems make sure to put the files inside the F: drive
+
+
+### Compatibility
+Tested on python 2.7.18 and above
